@@ -1,16 +1,23 @@
 // Example 3: maintains state.
 
 var prompt = require('prompt-sync')();
+var yaml = require('read-yaml')
+var yamlinfo;
 var ConversationV1 = require('watson-developer-cloud/conversation/v1');
+
+config = yaml.sync('credentials.yaml')
+
+
+console.log(config["Username"])
 
 // Set up Conversation service wrapper.
 var conversation = new ConversationV1({
-  username: '', // replace with service username
-  password: '', // replace with service password
+  username: config["Username"], // replace with service username
+  password: config["Password"], // replace with service password
   version_date: '2017-05-26'
 });
 
-var workspace_id = ''; // replace with workspace ID
+var workspace_id = config["Workspace_ID"]; // replace with workspace ID
 
 // Start conversation with empty message.
 conversation.message({

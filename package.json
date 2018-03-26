@@ -18,6 +18,7 @@
   "homepage": "https://github.com/softportal/ANIOT_Watson_Chatbot#readme",
   "dependencies": {
     "watson-developer-cloud": "*",
-    "prompt-sync": "*"
+    "prompt-sync": "*",
+    "read-yaml": "*"
   }
 }
