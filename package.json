@@ -19,6 +19,7 @@
   "dependencies": {
     "watson-developer-cloud": "*",
     "prompt-sync": "*",
+    "mongodb": "*",
     "read-yaml": "*"
   }
 }
