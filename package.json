@@ -1,0 +1,23 @@
+{
+  "name": "aniot_watson_chatbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "molesto.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/softportal/ANIOT_Watson_Chatbot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/softportal/ANIOT_Watson_Chatbot/issues"
+  },
+  "homepage": "https://github.com/softportal/ANIOT_Watson_Chatbot#readme",
+  "dependencies": {
+    "watson-developer-cloud": "*",
+    "prompt-sync": "*"
+  }
+}
