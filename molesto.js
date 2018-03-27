@@ -32,6 +32,22 @@ targetData.prototype.set_location= function(place) { this.place=place; };
 targetData.prototype.check_values=function(){
 	    return ((this.price != undefined) && (this.place != undefined) && (this.foodType != undefined));
 };
+targetData.prototype.query=function(){
+//{ "price" : "high","foodType":"Chiken","locations":"North"}
+  var that = this;
+  MongoClient.connect(url, function(err, db) {
+  	  if (err) throw err;
+  	  var dbo = db.db("test");
+  	  var query = { "price" : that.price,"foodType":that.foodType,"locations":that.place};
+  	  dbo.collection("restaurants").find(query).toArray(function(err, result) {
+  		      if (err) throw err;
+  		      console.log(result);
+  		      console.log('pene');
+  		      db.close();
+  		    });
+  });
+
+};
 // Process the conversation response.
 function processResponse(err, response) {
   if (err) {
@@ -61,8 +77,11 @@ function processResponse(err, response) {
   if (response.output.text.length != 0) {
       console.log(response.output.text[0]);
   }
-if (core.check_values()){console.log('FILLED');};
-if (!core.check_values()){console.log('UNFILLED');};
+  if (core.check_values()){
+    console.log('FILLED');
+    core.query();
+  }
+  if (!core.check_values()){console.log('UNFILLED');};
   // Prompt for the next round of input.
     var newMessageFromUser = prompt('>> ');
     // Send back the context to maintain state.
