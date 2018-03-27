@@ -6,7 +6,8 @@ var yamlinfo;
 var ConversationV1 = require('watson-developer-cloud/conversation/v1');
 
 config = yaml.sync('credentials.yaml')
-
+var MongoClient = require('mongodb').MongoClient;
+var url = "mongodb://localhost:27017/";
 
 console.log(config["Username"])
 
@@ -18,12 +19,19 @@ var conversation = new ConversationV1({
 });
 
 var workspace_id = config["Workspace_ID"]; // replace with workspace ID
-
+var core = new targetData();
 // Start conversation with empty message.
 conversation.message({
   workspace_id: workspace_id
   }, processResponse);
-
+//Create object to save received user preferences
+function targetData(){};
+targetData.prototype.set_foodType= function(foodType) { this.foodType=foodType; };
+targetData.prototype.set_price= function(price) { this.price=price; };
+targetData.prototype.set_location= function(place) { this.place=place; };
+targetData.prototype.check_values=function(){
+	    return ((this.price != undefined) && (this.place != undefined) && (this.foodType != undefined));
+};
 // Process the conversation response.
 function processResponse(err, response) {
   if (err) {
@@ -36,16 +44,25 @@ function processResponse(err, response) {
     console.log('Detected intent: #' + response.intents[0].intent);
   }
   //if a variable..
-  if (response.context.hasOwnProperty('targetLocation')) 
+  if (response.context.hasOwnProperty('targetLocation')){ 
     console.log('Target Location: #' + response.context.targetLocation);
+    core.set_location(response.context.targetLocation);
+  }
   //i
-  if (response.context.hasOwnProperty('targetPrice'))
-    console.log('Target Price:#' + response.context.tagetPrice);	
+  if (response.context.hasOwnProperty('targetPrice')){
+    console.log('Target Price:#' + response.context.targetPrice);	
+    core.set_price(response.context.targetPrice);
+  }
+  if (response.context.hasOwnProperty('targetFoodType')){
+    console.log('Target Food Type:#' + response.context.targetFoodType);
+    core.set_foodType(response.context.targetFoodType);
+  }
   // Display the output from dialog, if any.
   if (response.output.text.length != 0) {
       console.log(response.output.text[0]);
   }
-
+if (core.check_values()){console.log('FILLED');};
+if (!core.check_values()){console.log('UNFILLED');};
   // Prompt for the next round of input.
     var newMessageFromUser = prompt('>> ');
     // Send back the context to maintain state.
