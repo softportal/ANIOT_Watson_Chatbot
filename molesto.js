@@ -38,8 +38,12 @@ targetData.prototype.query=function(){
   MongoClient.connect(url, function(err, db) {
   	  if (err) throw err;
   	  var dbo = db.db("test");
+          console.log('Recorded price #'+that.price);
+          console.log('Recorded food type #'+that.foodType);
+          console.log('Recorded place #'+that.place);
   	  var query = { "price" : that.price,"foodType":that.foodType,"locations":that.place};
-  	  dbo.collection("restaurants").find(query).toArray(function(err, result) {
+          var opts = {collation: {locale: "en", strength: 2}}
+  	  dbo.collection("restaurants").find(query, opts).toArray(function(err, result) {
   		      if (err) throw err;
   		      console.log(result);
   		      console.log('pene');
@@ -81,7 +85,10 @@ function processResponse(err, response) {
     console.log('FILLED');
     core.query();
   }
-  if (!core.check_values()){console.log('UNFILLED');};
+  if (!core.check_values()){
+	console.log('UNFILLED');
+  
+
   // Prompt for the next round of input.
     var newMessageFromUser = prompt('>> ');
     // Send back the context to maintain state.
@@ -90,4 +97,5 @@ function processResponse(err, response) {
       input: { text: newMessageFromUser },
       context : response.context,
     }, processResponse)
+}
 }
